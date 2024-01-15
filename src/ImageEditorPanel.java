@@ -47,6 +47,27 @@ public class ImageEditorPanel extends JPanel implements KeyListener{
         System.exit(0);
     }
 
+    public Color[][] brightness(Color[][] origArr, double factor) {
+        Color[][] newArr = new Color[origArr.length][origArr[0].length];
+    
+        for (int r = 0; r < newArr.length; r++) {
+            for (int c = 0; c < newArr[0].length; c++) {
+                int red = (int) (origArr[r][c].getRed() * factor);
+                int green = (int) (origArr[r][c].getGreen() * factor);
+                int blue = (int) (origArr[r][c].getBlue() * factor);
+    
+                // Ensure values are within the valid color range (0-255)
+                red = Math.min(255, red);
+                green = Math.min(255, green);
+                blue = Math.min(255, blue);
+    
+                newArr[r][c] = new Color(red, green, blue);
+            }
+        }
+    
+        return newArr;
+    }
+
     public void saveImage() {
         BufferedImage imageOut = new BufferedImage(pixels[0].length, pixels.length, BufferedImage.TYPE_INT_RGB);
         
@@ -166,6 +187,10 @@ public class ImageEditorPanel extends JPanel implements KeyListener{
             pixels = flipVert(pixels);
         }else if (e.getKeyChar() == 'q'){
             quit = true;
+        }else if (e.getKeyChar() == 'm'){
+            double brightnessFactor = 1.2; //20% brightness
+
+            pixels = brightness(pixels, brightnessFactor);
         }
     }
 
